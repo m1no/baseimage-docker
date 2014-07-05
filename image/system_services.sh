@@ -5,7 +5,8 @@ set -x
 
 ## Install init process.
 cp /build/my_init /sbin/
-mkdir -p /etc/my_init.d
+mkdir -p /etc/my_init.d/start
+mkdir -p /etc/my_init.d/stop
 mkdir -p /etc/container_environment
 touch /etc/container_environment.sh
 touch /etc/container_environment.json
@@ -38,7 +39,7 @@ mkdir /var/run/sshd
 mkdir /etc/service/sshd
 cp /build/runit/sshd /etc/service/sshd/run
 cp /build/config/sshd_config /etc/ssh/sshd_config
-cp /build/00_regen_ssh_host_keys.sh /etc/my_init.d/
+cp /build/00_regen_ssh_host_keys.sh /etc/my_init.d/start
 
 ## Install default SSH key for root and app.
 mkdir -p /root/.ssh

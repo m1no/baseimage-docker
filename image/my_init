@@ -206,9 +206,10 @@ def kill_all_processes(time_limit):
 		signal.alarm(0)
 
 def run_startup_files():
-	# Run /etc/my_init.d/*
-	for name in listdir("/etc/my_init.d"):
-		filename = "/etc/my_init.d/" + name
+	info("Execute my_init start scripts...")
+	# Run /etc/my_init.d/start/*
+	for name in listdir("/etc/my_init.d/start"):
+		filename = "/etc/my_init.d/start/" + name
 		if is_exe(filename):
 			info("Running %s..." % filename)
 			run_command_killable_and_import_envvars(filename)
@@ -233,6 +234,13 @@ def wait_for_runit_or_interrupt(pid):
 		return (False, None)
 
 def shutdown_runit_services():
+	info("Execute my_init stop scripts...")
+	# Run /etc/my_init.d/stop/*
+	for name in listdir("/etc/my_init.d/stop"):
+		filename = "/etc/my_init.d/stop/" + name
+		if is_exe(filename):
+			info("Running %s..." % filename)
+			run_command_killable_and_import_envvars(filename)
 	debug("Begin shutting down runit services...")
 	os.system("/usr/bin/sv down /etc/service/*")
 
@@ -257,7 +265,7 @@ def main(args):
 
 	if not args.skip_startup_files:
 		run_startup_files()
-	
+
 	runit_exited = False
 	exit_code = None
 

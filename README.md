@@ -115,7 +115,7 @@ The image is called `phusion/baseimage`, and is available on the Docker registry
     # Regenerate SSH host keys. baseimage-docker does not contain any, so you
     # have to do that yourself. You may also comment out this instruction; the
     # init system will auto-generate one during boot.
-    RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+    RUN /etc/my_init.d/start/00_regen_ssh_host_keys.sh
     
     # Use baseimage-docker's init system.
     CMD ["/sbin/my_init"]
@@ -149,9 +149,9 @@ Note that the shell script must run the daemon **without letting it daemonize/fo
 <a name="running_startup_scripts"></a>
 ### Running scripts during container startup
 
-The baseimage-docker init system, `/sbin/my_init`, runs the following scripts during startup, in the following order:
+The baseimage-docker init system, `/sbin/my_init`, runs the following scripts during startup and stop in the following order:
 
- * All executable scripts in `/etc/my_init.d`, if this directory exists. The scripts are run in lexicographic order.
+ * All executable scripts in `/etc/my_init.d/start` and `/etc/my_init.d/stop`if the directory exists. The scripts are run in lexicographic order.
  * The script `/etc/rc.local`, if this file exists.
 
 All scripts must exit correctly, e.g. with exit code 0. If any script exits with a non-zero exit code, the booting will fail.
